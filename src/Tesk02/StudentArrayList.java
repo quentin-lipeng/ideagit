@@ -11,12 +11,9 @@ public class StudentArrayList implements Iterable<Student>{
 
     public StudentArrayList(){element = new Student[2];}
     
-    public int arraySize() {return element.length;}
-
     public void add(Student element) {
-        if(size >= this.element.length){
-        	this.switchElement();
-        }
+        if(size >= this.element.length){this.switchElement();}
+        
         this.element[size] = element;
         this.size++;
     }
@@ -36,14 +33,15 @@ public class StudentArrayList implements Iterable<Student>{
     //必须重写equals方法 因为直接调用equals会直接用 == 判断两个对象是否为同一个引用
     public boolean remove(Student student) {
     	for (int i=0; i<size; i++) {
-//    		必须在此处写判断是否null 在Student中equals写调用时会报错
-    		if (student == null) {
-    			return false;
-    		}
-    		if(student.equals(this.element[i])) {
-    			this.remove(i);
+    		if (this.element[i] == null) {
+//        		必须在此处写判断是否null 在Student中equals写调用时会报错
+        		if (student == null) { remove(i);return true;}
+        		//这行反之会报错 如果student.equals() 如果student为null 则肯定报错
+    		}else if(this.element[i].equals(student)) {
+    			remove(i);
     			return true;
     		}
+
     	}
     	return false;
     }
