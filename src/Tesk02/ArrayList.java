@@ -5,23 +5,24 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.Predicate;
 
-public class StudentArrayList implements Iterable<Student>{
-	private Student[] element;
+public class ArrayList<E> implements Iterable<E>{
+	private Object[] element;
     //数组当前实际大小
     private int size;
 
-    public StudentArrayList(){element = new Student[2];}
+    public ArrayList(){element = new Object[2];}
     
-    public void add(Student element) {
+    public void add(E element) {
         if(size >= this.element.length){this.switchElement();}
         
         this.element[size] = element;
         this.size++;
     }
 
-    public Student remove(int index) {
+    public E remove(int index) {
         if (index < size){
-            Student temp = this.element[index];
+            @SuppressWarnings("unchecked")
+			E temp = (E)this.element[index];
             for (int i=index ; i<size-1; i++) 
             	this.element[i] = this.element[i+1];
             if(this.element.length >(size + size/2)) 
@@ -32,7 +33,7 @@ public class StudentArrayList implements Iterable<Student>{
     }
     
     //必须重写equals方法 因为直接调用equals会直接用 == 判断两个对象是否为同一个引用
-    public boolean remove(Student student) {
+    public boolean remove(E student) {
     	for (int i=0; i<size; i++) {
     		if (this.element[i] == null) {
 //        		必须在此处写判断是否null 在Student中equals写调用时会报错
@@ -49,16 +50,17 @@ public class StudentArrayList implements Iterable<Student>{
 	
 	//传入一个需要更改大小的数组@element
     private void switchElement() {
-    	Student[] newElement = new Student[size+size/2];
+    	Object[] newElement = new Object[size+size/2];
     	for (int i=0;i<size;i++){
             newElement[i] = this.element[i];
         }
     	this.element = newElement;
     }
 
-    public Student get(int index) {
+    @SuppressWarnings("unchecked")
+	public E get(int index) {
         if (index < size){
-            return this.element[index];
+            return (E)this.element[index];
         }else {
             throw new NullPointerException("get()IsNull");
         }
@@ -66,11 +68,12 @@ public class StudentArrayList implements Iterable<Student>{
 
     public int size() {return size;}
     
-    public Student set(int index, Student element) {
+    @SuppressWarnings("unchecked")
+	public E set(int index, E element) {
         if (index <size){
-            Student temp = this.element[index];
+            Object temp = this.element[index];
                 this.element[index] = element;
-                return temp;
+                return (E)temp;
         }else {
             throw new IndexOutOfBoundsException("index");
         }
@@ -79,11 +82,12 @@ public class StudentArrayList implements Iterable<Student>{
     @Override
 	public String toString() {return "StudentArrayList [element=" + Arrays.toString(element) + "]";}
     
-	public StudentArrayList filter(Predicate<Student> predicate) {
+	@SuppressWarnings("unchecked")
+	public ArrayList<Object> filter(Predicate<E> predicate) {
 		//创建一个数组 之后判断条件 如果符合 把元素添加到新的
-		StudentArrayList filterObj = new StudentArrayList(); 
-		for (Student s : this.element) {
-			if(predicate.test(s)) {
+		ArrayList<Object> filterObj = new ArrayList<>(); 
+		for (Object s : this.element) {
+			if(predicate.test((E) s)) {
 				filterObj.add(s);
 			}
 		}
@@ -91,16 +95,17 @@ public class StudentArrayList implements Iterable<Student>{
 	}
 	
 	@Override
-	public Iterator<Student> iterator() {
-		return  new Iterator<Student>() {
+	public Iterator<E> iterator() {
+		return  new Iterator<E>() {
 			int count = 0;
 			@Override
 			public boolean hasNext() {
 				return count <size;
 			}
+			@SuppressWarnings("unchecked")
 			@Override
-			public Student next() {
-				return StudentArrayList.this.element[count++];
+			public E next() {
+				return (E)ArrayList.this.element[count++];
 			}
 		};
 	}
