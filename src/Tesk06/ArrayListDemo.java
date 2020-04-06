@@ -14,9 +14,11 @@ public class ArrayListDemo {
 		int index = 0;
 		while( students.size() > 1 ) {
 			//因索引从0开始所以需要删除的下标-1
-			//又因被删除数的后面会进行部位
+			//又因被删除数的后面会进行补位
 			index = index + m - 1;
-			//一旦index大于数组长度 求模会得出 如果index小于集合大小 index还会等于index本身
+			/**如果index大于集合大小 就会求出余数
+			如果index等于集合大小 就会等于0 
+			如果index小于集合大小 就会等于本身*/
 			index = index % students.size();
 			System.out.println(students.remove(index));
 		}
