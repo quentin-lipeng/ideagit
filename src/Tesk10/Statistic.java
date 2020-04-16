@@ -1,6 +1,6 @@
 package Tesk10;
 
-import java.sql.SQLException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -23,7 +23,12 @@ public class Statistic {
 				fnames.put(fname, 1);
 			}
 		}
-		fnames.forEach((k,v)->System.out.println(k.toString()+"="+v));
+		
+		fnames.entrySet().stream().sorted((f,s)->{
+			return -(f.getValue().compareTo(s.getValue()));
+		}).forEach(System.out::println);;
+
+		//		fnames.forEach((k,v)->System.out.println(k.toString()+"="+v));
 
 	}
 
