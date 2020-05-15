@@ -4,7 +4,7 @@ import java.util.LinkedList;
 
 public class SplitTest {
 	public static void main(String[] args) {
-		String expretions = " 12+ 2 + 9 -10 / 54  43+32   ";
+		String expretions = "12+ 2 + 9 -10 / 54  43+32   ";
 		LinkedList<Character> chars = new LinkedList<>();
 		LinkedList<String> words = new LinkedList<>();
 
