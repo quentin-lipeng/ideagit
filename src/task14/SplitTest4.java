@@ -3,10 +3,75 @@ package task14;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
+import java.util.Stack;
 
 public class SplitTest4 {
 	public static void main(String[] args) {
 		String expretions = " 1.21+ 2 + 9 -10 / 5* 4 * 4.3+32   ";
+		Queue<String> words = split(expretions);
+		double calc = calc(words);
+		System.out.println(calc);
+	}
+
+	private static double calc(Queue<String> words) {
+		// 运算的数字
+		Stack<Double> numbers = new Stack<>();
+		// 运算符
+		Stack<String> oprators = new Stack<>();
+		for (String word : words) {
+			try {
+				// 如果word不是数字 会进入catch块
+				numbers.push(Double.parseDouble(word));
+			} catch (Exception e) {
+				while (!oprators.isEmpty() && getLevel(word) <= getLevel(oprators.peek())) {
+					calc(numbers, oprators);
+				}
+				oprators.push(word);
+			}
+		}
+		while (!oprators.isEmpty()) {
+			calc(numbers, oprators);
+		}
+		return numbers.pop();
+	}
+
+	private static void calc(Stack<Double> numbers, Stack<String> oprators) {
+		String operator = oprators.pop();
+		Double num1 = numbers.pop();
+		Double num2 = numbers.pop();
+		switch (operator) {
+		case "+":
+			numbers.push(num2 + num1);
+			break;
+		case "-":
+			numbers.push(num2 - num1);
+			break;
+		case "*":
+			numbers.push(num2 * num1);
+			break;
+		case "/":
+			numbers.push(num2 / num1);
+			break;
+		default:
+			throw new IllegalArgumentException();
+		}
+	}
+
+	private static int getLevel(String oprator) {
+		switch (oprator) {
+		case "+":
+		case "-":
+			return 1;
+		case "*":
+		case "/":
+			return 2;
+		default:
+			throw new IllegalArgumentException("现只支持  [+] [-] [*] [/]");
+		}
+	}
+
+	public static Queue<String> split(String expretions) {
 		LinkedList<Character> chars = new LinkedList<>();// 未处理字符
 		LinkedList<String> words = new LinkedList<>();// 分词后的字符串列表
 
@@ -72,7 +137,7 @@ public class SplitTest4 {
 		inputMap16.put('\t', 16);
 		inputMap16.put(' ', 16);
 		inputMap16.put('+', -1);
-		inputMap16.put('-',-1);
+		inputMap16.put('-', -1);
 		inputMap16.put('*', -1);
 		inputMap16.put('/', -1);
 		inputMap16.put('.', null);
@@ -104,6 +169,6 @@ public class SplitTest4 {
 		}
 		if (strB.length() > 0)
 			words.add(strB.toString());// 分词后的字符串添加到字符串列表
-		words.forEach(System.out::println);
+		return words;
 	}
 }
